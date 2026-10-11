@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>30-Question Quiz: Financial Markets and Institutions</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#f3f6fb}
+*{box-sizing:border-box}body{margin:0;padding:22px 14px}.wrap{max-width:850px;margin:auto}
+header,.card,.results{background:#fff;border:1px solid #dbe3ef;border-radius:14px;padding:20px;margin-bottom:15px}
+h1{font-size:clamp(1.35rem,3vw,2rem);margin:0 0 9px}p{line-height:1.5}.muted{color:#64748b}
+.progressbar{height:8px;background:#e5eaf2;border-radius:20px;overflow:hidden;margin-top:12px}.progress{height:100%;width:0;background:#2563eb;transition:width .2s}
+.card h2{font-size:1.08rem;line-height:1.45;margin:0 0 14px}.options{display:grid;gap:9px}
+.option{display:flex;align-items:flex-start;gap:10px;border:1px solid #d8e0eb;border-radius:9px;padding:12px;cursor:pointer}
+.option:hover{background:#f8fafc;border-color:#93b4f5}.option input{margin-top:3px}
+.feedback{margin-top:13px;padding:12px;border-radius:8px;line-height:1.5}.good{background:#ecfdf3;color:#166534}.bad{background:#fff1f2;color:#9f1239}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}button{border:0;border-radius:9px;padding:12px 17px;font-size:1rem;font-weight:700;cursor:pointer}
+.primary{background:#2563eb;color:white}.secondary{background:#e2e8f0;color:#1f2937}button:disabled{opacity:.45;cursor:not-allowed}
+.results{display:none;text-align:center}.score{font-size:2.3rem;font-weight:800;margin:10px}
+footer{text-align:center;color:#64748b;font-size:.9rem;padding:10px}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+<h1>Chapter 1: Financial Markets and Institutions</h1>
+<p class="muted">30-question practice quiz based on your study material. Answer the questions, submit your quiz, and review the correct answers with explanations.</p>
+<div id="count" class="muted">Question 1 of 30</div>
+<div class="progressbar"><div id="progress" class="progress"></div></div>
+</header>
+<section id="quiz"></section>
+<div class="controls">
+<button id="prev" class="secondary">Previous</button>
+<button id="next" class="primary">Next</button>
+<button id="submit" class="primary">Submit quiz</button>
+</div>
+<section id="results" class="results" aria-live="polite">
+<h2>Your Results</h2><div id="score" class="score"></div><p id="summary" class="muted"></p>
+<button id="review" class="secondary">Review answers</button>
+<button id="retry" class="primary">Try again</button>
+</section>
+<footer>Practice regularly to prepare for your exam.</footer>
+</main>
+<script>
+const questions = [
+{q:"What is the main role of financial markets?",o:["Collecting taxes","Transferring funds from savers to investors","Printing currency","Setting every company's prices"],a:1,e:"Financial markets channel funds from savers to investors."},
+{q:"Which security promises interest and principal payments over a specified period?",o:["Common stock","Insurance policy","Mutual fund","Bond"],a:3,e:"A bond is a debt security that promises interest and principal payments."},
+{q:"Where does a company sell newly issued shares to raise money?",o:["Secondary market","Foreign exchange market","Primary market","Insurance market"],a:2,e:"The primary market is where companies sell newly issued shares."},
+{q:"What does an interest rate represent?",o:["The cost of borrowing money","Ownership in a business","A company's total revenue","The value of a currency"],a:0,e:"An interest rate represents the cost of borrowing money."},
+{q:"Which item is an example of an interest rate mentioned in the slides?",o:["Employment rate","Population growth rate","Mortgage rate","Exchange rate"],a:2,e:"Mortgage rates are listed as an example, alongside car-loan and credit-card rates."},
+{q:"What happens in the secondary stock market?",o:["Companies print banknotes","Investors trade previously issued stocks","Only new shares are first sold","Currencies are exchanged exclusively"],a:1,e:"The secondary market is where investors trade stocks that have already been issued."},
+{q:"Which market trades international currencies?",o:["Bond market","Primary stock market","Mortgage market","Foreign exchange market"],a:3,e:"The foreign exchange market trades international currencies and helps determine exchange rates."},
+{q:"Which is an example of a financial institution listed in the chapter?",o:["Insurance company","Restaurant","Clothing shop","Construction site"],a:0,e:"Insurance companies are among the financial institutions mentioned."},
+{q:"Financial innovation in this chapter concerns which area?",o:["Ending all financial services","Removing every financial product","Technology improvements affecting product delivery","Replacing investors with governments"],a:2,e:"Financial innovation includes technological improvements and their effects on how financial products are delivered."},
+{q:"Which topic is one of the chapter's learning objectives?",o:["Car manufacturing","Arbitrage and the profit motive","Building design","Agricultural irrigation"],a:1,e:"The chapter's analytic framework includes arbitrage and the profit motive."},
+{q:"What does common stock represent?",o:["A loan to a government","A type of insurance contract","A fixed interest payment","Ownership in a company"],a:3,e:"Common stock represents ownership in a company."},
+{q:"Which is also mentioned as a financial institution?",o:["Pension fund","Bakery","Cinema","Travel agency"],a:0,e:"Pension funds are included among the financial institutions discussed."},
+{q:"Which other institution is discussed in the slides?",o:["Sports club","Mutual fund","Restaurant chain","Clothing store"],a:1,e:"Mutual funds are among the examples of financial institutions."},
+{q:"Financial markets can affect which of the following?",o:["Only the weather","Only school timetables","Wealth, firms, and the economy","Only sporting events"],a:2,e:"Financial markets affect wealth, businesses, and the broader economy."},
+{q:"What does SEO mean in the stock-market discussion?",o:["Stock exchange operation","Standard earnings outlook","Secured exchange order","Seasoned equity offering"],a:3,e:"SEO means seasoned equity offering, an additional equity offering by a public company."},
+{q:"The foreign exchange market helps determine exchange rates.",o:["True","False"],a:0,e:"True. Trading between currencies helps determine exchange rates."},
+{q:"A bond represents ownership in a company.",o:["True","False"],a:1,e:"False. Common stock represents ownership; a bond is a debt security."},
+{q:"Which factor can influence the success of an additional stock offering?",o:["The company's office color","The weather alone","The current stock price","The number of nearby schools"],a:2,e:"The slides note that an additional equity offering's success depends on the current stock price."},
+{q:"Which concept belongs to the chapter's analytical framework?",o:["Fashion seasons","Transaction costs","Tourism preferences","Sports rankings"],a:1,e:"Transaction costs are included in the analytical framework."},
+{q:"Which is a stated learning objective?",o:["Designing a building","Manufacturing vehicles","Learning a foreign language","Understanding causes and consequences of financial crises"],a:3,e:"The chapter identifies the causes and consequences of financial crises as a learning objective."},
+{q:"What does the debt or bond market allow governments, corporations, and individuals to do?",o:["Borrow money","Issue common stock only","Set every exchange rate","Avoid all financial risk"],a:0,e:"The debt or bond market provides a way for governments, corporations, and individuals to borrow."},
+{q:"What is the primary market's role for a company issuing shares?",o:["Trading old shares between investors","Exchanging international currencies","Raising money by selling new shares","Paying interest on every bond"],a:2,e:"Companies can raise funds by selling new shares in the primary market."},
+{q:"Who usually trades shares with one another in the secondary market?",o:["Only the company issuing the shares","Investors","Only tax authorities","Only insurance policyholders"],a:1,e:"The secondary market supports trading of previously issued stocks among investors."},
+{q:"Which is a type of borrowing rate specifically mentioned in the slides?",o:["Literacy rate","Birth rate","Unemployment rate","Car loan rate"],a:3,e:"Car-loan rates are one of the interest-rate examples in the chapter."},
+{q:"The slides describe the 2007–2009 financial crisis as what?",o:["A minor local business issue","A stock-market event with no wider effects","The worst financial crisis since the Great Depression","A crisis limited to foreign exchange"],a:2,e:"The slides describe the 2007–2009 financial crisis as the worst since the Great Depression."},
+{q:"Why might managers benefit from understanding financial institutions?",o:["They are among major employers and often pay high salaries","They determine all school grades","They operate without risk","They replace every other industry"],a:0,e:"The slides note that financial institutions are among the largest employers and often pay high salaries."},
+{q:"What does the chapter's analytic framework say about information?",o:["Information never matters","Information and information asymmetry matter","Only public companies use information","Information removes all transaction costs"],a:1,e:"The framework includes the role of information and asymmetric information."},
+{q:"What is arbitrage associated with in the chapter's framework?",o:["Avoiding every transaction","Setting tax rates","Manufacturing financial products","Seeking profit from market opportunities"],a:3,e:"Arbitrage and profit-seeking are part of the chapter's analytic framework."},
+{q:"Which statement best describes financial institutions?",o:["They are only government departments","They deal only in foreign currencies","They help operate marketplaces and the financial system","They only manufacture physical goods"],a:2,e:"Financial institutions are organizations or networks that operate marketplaces and help the financial system move funds."},
+{q:"Why are financial markets important to economic growth?",o:["They help direct funds toward investment","They stop all borrowing","They remove the need for companies","They guarantee every investment will profit"],a:0,e:"By channeling savings toward investors, financial markets support economic efficiency and growth."}
+];
+
+const quiz = document.getElementById("quiz"), count = document.getElementById("count");
+const progress = document.getElementById("progress"), prev = document.getElementById("prev");
+const next = document.getElementById("next"), submit = document.getElementById("submit");
+const results = document.getElementById("results");
+let current = 0, answers = Array(questions.length).fill(null), submitted = false;
+
+function render(){
+ const item = questions[current];
+ count.textContent = `Question ${current+1} of ${questions.length}`;
+ progress.style.width = `${(current+1)/questions.length*100}%`;
+ quiz.innerHTML = "";
+ const card = document.createElement("article"); card.className = "card";
+ const heading = document.createElement("h2"); heading.textContent = `${current+1}. ${item.q}`; card.appendChild(heading);
+ const options = document.createElement("div"); options.className = "options";
+ item.o.forEach((text,index)=>{
+   const label = document.createElement("label"); label.className = "option";
+   const radio = document.createElement("input"); radio.type = "radio"; radio.name = "answer"; radio.value = index;
+   radio.checked = answers[current] === index; radio.disabled = submitted;
+   radio.addEventListener("change",()=>answers[current]=index);
+   const span = document.createElement("span"); span.textContent = `${String.fromCharCode(65+index)}. ${text}`;
+   label.append(radio,span); options.appendChild(label);
+ });
+ card.appendChild(options);
+ if(submitted){
+   const correct = answers[current] === item.a;
+   const feedback = document.createElement("div");
+   feedback.className = `feedback ${correct?"good":"bad"}`;
+   feedback.textContent = `${correct?"Correct!":"Not quite."} Answer: ${String.fromCharCode(65+item.a)}. ${item.o[item.a]}. ${item.e}`;
+   card.appendChild(feedback);
+ }
+ quiz.appendChild(card);
+ prev.disabled = current===0; next.disabled = current===questions.length-1;
+}
+function submitQuiz(){
+ const missing = answers.filter(a=>a===null).length;
+ if(missing && !confirm(`You have ${missing} unanswered question(s). Submit anyway?`)) return;
+ submitted=true;
+ const score=answers.reduce((sum,a,i)=>sum+(a===questions[i].a?1:0),0);
+ document.getElementById("score").textContent=`${score} / ${questions.length}`;
+ document.getElementById("summary").textContent=`${Math.round(score/questions.length*100)}% correct. Review the explanations to revise the topics you missed.`;
+ results.style.display="block"; submit.style.display="none"; next.style.display="none"; prev.style.display="none";
+ render(); results.scrollIntoView({behavior:"smooth",block:"start"});
+}
+prev.addEventListener("click",()=>{if(current>0){current--;render()}});
+next.addEventListener("click",()=>{if(current<questions.length-1){current++;render()}});
+submit.addEventListener("click",submitQuiz);
+document.getElementById("review").addEventListener("click",()=>{current=0;results.style.display="none";render();window.scrollTo({top:0,behavior:"smooth"})});
+document.getElementById("retry").addEventListener("click",()=>{current=0;answers=Array(questions.length).fill(null);submitted=false;results.style.display="none";submit.style.display="inline-block";next.style.display="inline-block";prev.style.display="inline-block";render();window.scrollTo({top:0,behavior:"smooth"})});
+render();
+</script>
+</body>
+</html>
